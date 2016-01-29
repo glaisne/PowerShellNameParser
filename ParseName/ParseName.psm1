@@ -25,16 +25,19 @@ Possible patterns:
     First Last
     First Last Suffix
     First Mi Last
+    First Mi. Last
     First Mi Last Suffix
+    First Mi. Last Suffix
     First Middle Last
     First Middle Last Suffix
 
-    X Last, First
-    X Last, First Mi
-    X Last, First Middle
-    X Last Suffix, First
-    X Last Suffix, First Mi
-    X Last Suffix, First Middle
+    Last, First
+    Last, First Mi
+    Last, First Middle
+    Last Suffix, First
+    Last Suffix, First Mi
+    Last Suffix, First Mi.
+    Last Suffix, First Middle
 #>
 
     Begin
