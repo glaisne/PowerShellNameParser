@@ -20,17 +20,7 @@ Possible patterns:
     X Last Suffix, First Middle
 #>
 
-<# Known Issues:
-PS PowerShell:\work\Scripts> .\Parse-Name.ps1 -name "DANIEL Harmon III"
 
-
-MiddleName    : Harmon
-Suffix        :
-FirstName     : DANIEL
-MiddleInitial :
-LastName      : III
-
-#>
 
 $parsedName = new-object psobject -Property @{
     FirstName     = [string]::Empty
@@ -54,52 +44,63 @@ if ($ContainsComma)
 {
     switch ($name)
     {
+        # Last, First
         {$_ -match "^(\w{2,}), (\w{2,})$"}
             {
                 $_ -match "^(\w{2,}), (\w{2,})$" | Out-Null
-                $parsedName.FirstName      = $matches[2]
                 $parsedName.LastName       = $matches[1]
+                $parsedName.FirstName      = $matches[2]
                 Break
             }
+
+        # Last, first, Mi
         {$_ -match "^(\w{2,}), (\w{2,}) (\w)$"}
             {
                 $_ -match "^(\w{2,}), (\w{2,}) (\w)$" | Out-Null
-                $parsedName.FirstName      = $matches[2]
                 $parsedName.LastName       = $matches[1]
+                $parsedName.FirstName      = $matches[2]
                 $parsedName.MiddleInitial  = $matches[3]
                 Break
             }
+
+        # Last, First Middle
         {$_ -match "^(\w{2,}), (\w{2,}) (\w{2,})$"}
             {
                 $_ -match "^(\w{2,}), (\w{2,}) (\w{2,})$" | Out-Null
-                $parsedName.FirstName      = $matches[2]
                 $parsedName.LastName       = $matches[1]
+                $parsedName.FirstName      = $matches[2]
                 $parsedName.MiddleName     = $matches[3]
                 Break
             }
-        {$_ -match "^(\w{2,}) (\w{2,3}), (\w{2,})$"}
+
+        # Last Suffix, First
+        {$_ -match "^(\w{2,}) (jr|sr|[IV]{3}), (\w{2,})$"}
             {
                 $_ -match "^(\w{2,}) (\w{2,3}), (\w{2,})$" | Out-Null
-                $parsedName.FirstName      = $matches[3]
-                $parsedName.Suffix         = $matches[2]
                 $parsedName.LastName       = $matches[1]
+                $parsedName.Suffix         = $matches[2]
+                $parsedName.FirstName      = $matches[3]
                 Break
             }
-        {$_ -match "^(\w{2,}) (\w{2,3}), (\w{2,}) (\w)$"}
+
+        # Last Suffix, First Mi
+        {$_ -match "^(\w{2,}) (jr|sr|[IV]{3}), (\w{2,}) (\w)$"}
             {
-                $_ -match "^(\w{2,}) (\w{2,3}), (\w{2,}) (\w)$" | Out-Null
-                $parsedName.FirstName      = $matches[3]
-                $parsedName.Suffix         = $matches[2]
+                $_ -match "^(\w{2,}) (jr|sr|[IV]{3}), (\w{2,}) (\w)$" | Out-Null
                 $parsedName.LastName       = $matches[1]
+                $parsedName.Suffix         = $matches[2]
+                $parsedName.FirstName      = $matches[3]
                 $parsedName.MiddleInitial  = $matches[4]
                 Break
             }
-        {$_ -match "^(\w{2,}) (\w{2,3}), (\w{2,}) (\w{2,})$"}
+
+        # Last Suffix, First Middle
+        {$_ -match "^(\w{2,}) (jr|sr|[IV]{3}), (\w{2,}) (\w{2,})$"}
             {
-                $_ -match "^(\w{2,}) (\w{2,3}), (\w{2,}) (\w{2,})$" | Out-Null
-                $parsedName.FirstName      = $matches[3]
-                $parsedName.Suffix         = $matches[2]
+                $_ -match "^(\w{2,}) (jr|sr|[IV]{3}), (\w{2,}) (\w{2,})$" | Out-Null
                 $parsedName.LastName       = $matches[1]
+                $parsedName.Suffix         = $matches[2]
+                $parsedName.FirstName      = $matches[3]
                 $parsedName.MiddleName     = $matches[4]
                 Break
             }
@@ -107,9 +108,19 @@ if ($ContainsComma)
     }
 }
 else
+<#
+    First Last
+    First Last Suffix
+    First Mi Last
+    First Mi Last Suffix
+    First Middle Last
+    First Middle Last Suffix
+    #>
+
 {
     switch ($name)
     {
+        # First Last
         {$_ -match "^(\w{2,}) (\w{2,})$"}
             {
                 $_ -match "^(\w{2,}) (\w{2,})$" | Out-Null
@@ -117,46 +128,56 @@ else
                 $parsedName.LastName       = $matches[2]
                 Break
             }
+
+        # First Mi Last
         {$_ -match "^(\w{2,}) (\w) (\w{2,})$"}
             {
                 $_ -match "^(\w{2,}) (\w) (\w{2,})$" | Out-Null
                 $parsedName.FirstName      = $matches[1]
-                $parsedName.LastName       = $matches[3]
                 $parsedName.MiddleInitial  = $matches[2]
+                $parsedName.LastName       = $matches[3]
                 Break
             }
+
+        # First Middle Last
         {$_ -match "^(\w{2,}) (\w{2,}) (\w{2,})$"}
             {
                 $_ -match "^(\w{2,}) (\w{2,}) (\w{2,})$" | Out-Null
                 $parsedName.FirstName      = $matches[1]
-                $parsedName.LastName       = $matches[3]
                 $parsedName.MiddleName     = $matches[2]
+                $parsedName.LastName       = $matches[3]
                 Break
             }
-        {$_ -match "^(\w{2,}) (\w{2,}) (\w{2,3})$"}
+
+        # First Last Suffix
+        {$_ -match "^(\w{2,}) (\w{2,}) (jr|sr|[IV]{3})$"}
             {
-                $_ -match "^(\w{2,}) (\w{2,}) (\w{2,3})$" | Out-Null
+                $_ -match "^(\w{2,}) (\w{2,}) (jr|sr|[IV]{3})$" | Out-Null
                 $parsedName.FirstName      = $matches[1]
-                $parsedName.Suffix         = $matches[3]
                 $parsedName.LastName       = $matches[2]
+                $parsedName.Suffix         = $matches[3]
                 Break
             }
-        {$_ -match "^(\w{2,}) (\w) (\w{2,}) (\w{2,3})$"}
+
+        # First Mi Last Suffix
+        {$_ -match "^(\w{2,}) (\w) (\w{2,}) (jr|sr|[IV]{3})$"}
             {
-                $_ -match "^(\w{2,}) (\w) (\w{2,}) (\w{2,3})$" | Out-Null
+                $_ -match "^(\w{2,}) (\w) (\w{2,}) (jr|sr|[IV]{3})$" | Out-Null
                 $parsedName.FirstName      = $matches[1]
-                $parsedName.Suffix         = $matches[4]
-                $parsedName.LastName       = $matches[3]
                 $parsedName.MiddleInitial  = $matches[2]
+                $parsedName.LastName       = $matches[3]
+                $parsedName.Suffix         = $matches[4]
                 Break
             }
-        {$_ -match "^(\w{2,}) (\w{2,}) (\w{2,}) (\w{2,3})$"}
+
+        # First Middle Last Suffix
+        {$_ -match "^(\w{2,}) (\w{2,}) (\w{2,}) (jr|sr|[IV]{3})$"}
             {
-                $_ -match "^(\w{2,}) (\w{2,}) (\w{2,}) (\w{2,3})$" | Out-Null
+                $_ -match "^(\w{2,}) (\w{2,}) (\w{2,}) (jr|sr|[IV]{3})$" | Out-Null
                 $parsedName.FirstName      = $matches[1]
-                $parsedName.Suffix         = $matches[4]
-                $parsedName.LastName       = $matches[3]
                 $parsedName.MiddleName     = $matches[2]
+                $parsedName.LastName       = $matches[3]
+                $parsedName.Suffix         = $matches[4]
                 Break
             }
         Default {}
