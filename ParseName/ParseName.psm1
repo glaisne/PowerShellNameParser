@@ -17,7 +17,8 @@ function Parse-Name
         [Parameter(Mandatory=$true,
                    ValueFromPipeline=$true,
                    Position=0)]
-        [string[]] $name
+        [ValidateNotNullOrEmpty()]
+        [string[]] $Name
     )
 
 <#
@@ -46,7 +47,7 @@ Possible patterns:
 
     Process
     {
-        Foreach ($entry in $name)
+        Foreach ($entry in $Name)
         {
 
             $parsedName = new-object psobject -Property @{
@@ -132,7 +133,7 @@ Possible patterns:
                             Break
                         }
                     Default {
-                        Write-Error "Was unable to match patter for name $entry"
+                        Write-Error "Was unable to match pattern for name $entry"
                     }
                 }
             }
@@ -201,7 +202,7 @@ Possible patterns:
                             Break
                         }
                     Default {
-                        Write-Error "Was unable to match patter for name $entry"
+                        Write-Error "Was unable to match pattern for name $entry"
                     }
                 }
             }
